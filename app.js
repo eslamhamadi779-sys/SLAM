@@ -80,3 +80,71 @@ onSnapshot(q, (snapshot) => {
             </div>`;
     });
 });
+
+// أضف getStorage للتحميلات
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+const storage = getStorage(app);
+
+// معاينة الملف قبل الرفع
+document.getElementById('file-input').onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) document.getElementById('file-preview').innerText = "تم اختيار: " + file.name;
+};
+
+// النشر المطور (نص + ميديا)
+document.getElementById('publish-btn').onclick = async () => {
+    const text = document.getElementById('post-input').value;
+    const file = document.getElementById('file-input').files[0];
+    if (!text && !file) return;
+
+    let fileUrl = "";
+    if (file) {
+        const storageRef = ref(storage, 'uploads/' + Date.now() + "_" + file.name);
+        await uploadBytes(storageRef, file);
+        fileUrl = await getDownloadURL(storageRef);
+    }
+
+    await addDoc(collection(db, "posts"), {
+        text: text,
+        media: fileUrl,
+        mediaType: file ? file.type.split('/')[0] : "none", // image or video
+        author: auth.currentUser.displayName,
+        photo: auth.currentUser.photoURL,
+        views: Math.floor(Math.random() * 5) + 1,
+        likes: 0,
+        comments: [],
+        createdAt: serverTimestamp()
+    });
+    
+    document.getElementById('post-input').value = "";
+    document.getElementById('file-preview').innerText = "";
+};
+
+// عرض المنشورات مع ميزة المشاهدات x10 والقلب الأسود
+onSnapshot(q, (snapshot) => {
+    const container = document.getElementById('posts-container');
+    container.innerHTML = "";
+    snapshot.forEach((doc) => {
+        const post = doc.data();
+        const fakeViews = (post.views || 1) * 10; // الرؤية مضروبة في 10 كما طلبت
+        
+        let mediaHtml = "";
+        if (post.mediaType === "image") mediaHtml = `<img src="${post.media}" class="post-media">`;
+        if (post.mediaType === "video") mediaHtml = `<video src="${post.media}" class="post-media" controls></video>`;
+
+        container.innerHTML += `
+            <div class="post-card">
+                <strong>${post.author}</strong>
+                <p>${post.text}</p>
+                ${mediaHtml}
+                <div style="margin-top:10px;">
+                    <button class="like-btn">🖤</button> <span style="font-size:12px; color:#ff4b91;">👁️ ${fakeViews} مشاهدة</span>
+                </div>
+                <div class="comment-section">
+                    <input type="text" class="comment-input" placeholder="اكتب تعليقاً...">
+                    <button style="border:none; background:none; color:#ff4b91; cursor:pointer;">↩️</button>
+                </div>
+            </div>`;
+    });
+});
