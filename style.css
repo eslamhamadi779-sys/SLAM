@@ -139,3 +139,21 @@ textarea {
 .post-btn:hover {
     background: #e63982;
     box-shadow: 0 4px
+
+/* مظهر القلب الأسود عند الإعجاب */
+.like-btn {
+    background: none; border: none; cursor: pointer; font-size: 18px; color: #000;
+}
+
+/* صندوق التعليقات */
+.comment-section {
+    margin-top: 10px; padding-top: 10px; border-top: 1px inset #eee;
+}
+.comment-input {
+    width: 80%; border: 1px solid #ffdae9; border-radius: 15px; padding: 5px 10px; outline: none;
+}
+
+/* عرض الصور والفيديو في المنشور */
+.post-media {
+    width: 100%; border-radius: 15px; margin-top: 10px; max-height: 400px; object-fit: cover;
+}
