@@ -148,3 +148,22 @@ onSnapshot(q, (snapshot) => {
             </div>`;
     });
 });
+// إضافة ميزة التخزين الدائم
+import { enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// تفعيل الذاكرة القوية (Offline Persistence)
+enableIndexedDbPersistence(db).catch((err) => {
+    console.log("الذاكرة تعمل أونلاين فقط حالياً");
+});
+
+// مراقبة الدخول لظهور البروفايل
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById('user-name').innerText = user.displayName;
+        document.getElementById('user-img').src = user.photoURL;
+        document.getElementById('user-bio').innerText = "مرحباً بك في إمبراطوريتك 🖤🤍";
+        // إظهار زر "صفحتي الشخصية" (وهمي حالياً)
+        document.getElementById('user-name').style.cursor = "pointer";
+        document.getElementById('user-name').onclick = () => alert("هذه صفحتك الشخصية يا هندسة!");
+    }
+});
