@@ -3,70 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SLAM | إمبراطورية الهاشمي</title>
+    <title>💕 SLAM | منصة الحب والمواقع 💕</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
+    <!-- الشريط العلوي -->
     <nav class="navbar">
-        <div class="logo" onclick="showSection('feed')">SLAM 🖤🤍</div>
-        <input type="text" class="search-bar" placeholder="بحث عن أشخاص أو #هاشتاج...">
+        <div class="logo" onclick="showSection('feed')">
+            <i class="fas fa-heart"></i> SLAM 💕
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-bar" id="searchInput" placeholder="🔍 ابحث عن أشخاص أو #هاشتاج أو مجموعات...">
+        </div>
         <div class="nav-icons">
-            <button id="login-btn">دخول بجوجل</button>
+            <i class="fas fa-random random-btn" title="بحث عشوائي" onclick="randomMatch()"></i>
+            <button id="login-btn" class="login-btn">
+                <i class="fab fa-google"></i> دخول
+            </button>
         </div>
     </nav>
 
     <div class="main-layout">
+        <!-- الشريط الجانبي -->
         <aside class="sidebar">
             <div class="mini-profile" onclick="showSection('profile')">
-                <img src="https://via.placeholder.com/80" id="user-img" class="profile-img">
-                <h3 id="user-name">زائر</h3>
-                <p id="user-bio">جاري تحميل البايو...</p>
+                <div class="profile-avatar">
+                    <img src="https://via.placeholder.com/80/ff69b4/ffffff?text=👤" id="user-img">
+                    <div class="online-status"></div>
+                </div>
+                <div class="profile-info">
+                    <h3 id="user-name">زائر غير مسجل</h3>
+                    <p id="user-bio">💕 ابدأ رحلتك الرومانسية مع SLAM</p>
+                    <span class="status">غير متصل</span>
+                </div>
             </div>
+            
             <nav class="menu">
-                <button onclick="showSection('feed')">🏠 الرئيسية (العام)</button>
-                <button onclick="showSection('profile')">👤 صفحتي الشخصية</button>
-                <button onclick="showSection('messages')">💬 الرسائل الخاصّة</button>
-                <button onclick="showSection('groups')">👨‍👩‍👧‍👦 المجموعات والصفحات</button>
-                <button onclick="showSection('settings')">⚙️ الإعدادات</button>
+                <button onclick="showSection('feed')" class="menu-item active">
+                    <i class="fas fa-home"></i> الرئيسية
+                </button>
+                <button onclick="showSection('profile')" class="menu-item">
+                    <i class="fas fa-user"></i> صفحتي
+                </button>
+                <button onclick="showSection('messages')" class="menu-item">
+                    <i class="fas fa-comments"></i> الرسائل
+                </button>
+                <button onclick="showSection('groups')" class="menu-item">
+                    <i class="fas fa-users"></i> المجموعات
+                </button>
+                <button onclick="showSection('random')" class="menu-item">
+                    <i class="fas fa-dice"></i> بحث عشوائي
+                </button>
+                <button onclick="showSection('discover')" class="menu-item">
+                    <i class="fas fa-heart"></i> اكتشف
+                </button>
+                <button onclick="showSection('settings')" class="menu-item">
+                    <i class="fas fa-cog"></i> الإعدادات
+                </button>
             </nav>
         </aside>
 
+        <!-- المحتوى الرئيسي -->
         <main class="content-area">
-            
-            <section id="feed-section" class="app-section">
-                <div class="publish-box" id="publish-area">
-                    <textarea id="post-input" placeholder="ماذا يدور في ذهنك يا إمبراطور؟ #SLAM"></textarea>
-                    <div class="actions">
-                        <label for="file-input">🖼️/🎥</label>
-                        <input type="file" id="file-input" style="display:none">
-                        <button class="post-btn" id="publish-btn">نشر الآن 🚀</button>
+            <!-- الصفحة الرئيسية -->
+            <section id="feed-section" class="app-section active">
+                <div class="publish-box">
+                    <div class="post-header">
+                        <img src="https://via.placeholder.com/40/ff1493/fff?text=💕" id="post-avatar">
+                        <textarea id="post-input" placeholder="💭 شارك مشاعرك الرومانسية... #SLAM #الحب"></textarea>
                     </div>
+                    <div class="post-actions">
+                        <label for="file-input" class="action-btn">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="file-input" accept="image/*" style="display:none">
+                        <button class="post-btn" id="publish-btn">
+                            <i class="fas fa-rocket"></i> نشر 💕
+                        </button>
+                    </div>
+                </div>
+                <div class="stories-section">
+                    <h3>💫 القصص الرومانسية</h3>
+                    <div id="stories-container" class="stories-container"></div>
                 </div>
                 <div id="posts-container"></div>
             </section>
 
-            <section id="profile-section" class="app-section" style="display:none">
+            <!-- الصفحة الشخصية -->
+            <section id="profile-section" class="app-section">
                 <div class="profile-header">
-                    <img src="" id="big-profile-img" class="big-img">
-                    <h2 id="profile-full-name">الإسم</h2>
-                    <textarea id="bio-input" placeholder="اكتب بايو يعبر عنك..."></textarea>
-                    <button class="save-btn" onclick="saveBio()">حفظ البايو 💾</button>
+                    <div class="profile-cover" id="profile-cover">
+                        <i class="fas fa-heart-broken cover-icon"></i>
+                    </div>
+                    <div class="profile-avatar-large">
+                        <img src="" id="big-profile-img">
+                        <div class="edit-avatar" onclick="editProfilePhoto()">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="profile-info-large">
+                        <h2 id="profile-full-name">الاسم الرومانسي</h2>
+                        <p id="profile-status">💕 جاهز للحب الجديد</p>
+                        <div class="profile-stats">
+                            <span><strong id="posts-count">0</strong> منشور</span>
+                            <span><strong id="friends-count">0</strong> صديق</span>
+                            <span><strong id="groups-count">0</strong> مجموعة</span>
+                        </div>
+                    </div>
                 </div>
-                <div id="my-posts-container"></div>
+                <div class="profile-tabs">
+                    <button class="tab-btn active" onclick="showProfileTab('posts')">المنشورات</button>
+                    <button class="tab-btn" onclick="showProfileTab('friends')">الأصدقاء</button>
+                    <button class="tab-btn" onclick="showProfileTab('photos')">الصور</button>
+                </div>
+                <div id="profile-posts-container"></div>
+                <div id="profile-friends-container" style="display:none"></div>
+                <div id="profile-photos-container" style="display:none"></div>
             </section>
 
-            <section id="messages-section" class="app-section" style="display:none">
-                <h2>💬 صندوق الوارد</h2>
-                <div class="msg-list">قريباً: شات مباشر مع الأصدقاء...</div>
+            <!-- الرسائل -->
+            <section id="messages-section" class="app-section">
+                <div class="messages-header">
+                    <h2><i class="fas fa-comments"></i> الرسائل الخاصة</h2>
+                    <button class="new-chat-btn" onclick="createNewChat()">
+                        <i class="fas fa-plus"></i> محادثة جديدة
+                    </button>
+                </div>
+                <div class="chats-list" id="chats-list"></div>
+                <div class="chat-window" id="chat-window" style="display:none">
+                    <div class="chat-header">
+                        <img src="" class="chat-avatar" id="chat-avatar">
+                        <div>
+                            <h3 id="chat-name"></h3>
+                            <span id="chat-status"></span>
+                        </div>
+                        <button class="chat-video-btn">
+                            <i class="fas fa-video"></i>
+                        </button>
+                    </div>
+                    <div class="messages-container" id="messages-container"></div>
+                    <div class="message-input-container">
+                        <input type="text" id="message-input" placeholder="اكتب رسالتك... 💕">
+                        <button id="send-message-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </section>
 
+            <!-- المجموعات -->
+            <section id="groups-section" class="app-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> المجموعات الرومانسية</h2>
+                    <button class="create-group-btn" onclick="createGroup()">
+                        <i class="fas fa-plus"></i> مجموعة جديدة
+                    </button>
+                </div>
+                <div class="groups-grid" id="groups-container"></div>
+            </section>
+
+            <!-- البحث العشوائي -->
+            <section id="random-section" class="app-section">
+                <div class="random-section">
+                    <div class="random-card">
+                        <i class="fas fa-dice-five"></i>
+                        <h2>🎲 البحث العشوائي</h2>
+                        <p>ابحث عن شريك حياتك بشكل عشوائي!</p>
+                        <button class="random-btn-large" onclick="startRandomMatch()">
+                            ابدأ البحث <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div id="random-result" style="display:none">
+                        <div class="match-card">
+                            <img src="" id="random-user-img" class="match-avatar">
+                            <h3 id="random-user-name"></h3>
+                            <p id="random-user-bio"></p>
+                            <div class="match-actions">
+                                <button class="like-btn" onclick="sendLike()">
+                                    <i class="fas fa-heart"></i> إعجاب
+                                </button>
+                                <button class="chat-btn" onclick="startChatWithRandom()">
+                                    <i class="fas fa-comments"></i> دردشة
+                                </button>
+                                <button class="next-btn" onclick="nextRandom()">
+                                    <i class="fas fa-forward"></i> التالي
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- اكتشف -->
+            <section id="discover-section" class="app-section">
+                <h2>✨ اكتشف أشخاص جدد</h2>
+                <div class="discover-grid" id="discover-container"></div>
+            </section>
+
+            <!-- الإعدادات -->
+            <section id="settings-section" class="app-section">
+                <h2><i class="fas fa-cog"></i> الإعدادات</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <label>الخصوصية</label>
+                        <select>
+                            <option>عامة</option>
+                            <option>الأصدقاء</option>
+                            <option>خاصة</option>
+                        </select>
+                    </div>
+                    <!-- المزيد من الإعدادات -->
+                </div>
+            </section>
         </main>
     </div>
 
-    <footer class="footer">
-        جميع الحقوق الملكية والفكرية محفوظة للمهندس إسلام الهاشمي © 2026 🖤🤍
-    </footer>
+    <!-- Modal للمجموعات -->
+    <div id="group-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>إنشاء مجموعة جديدة</h3>
+            <input type="text" id="group-name" placeholder="اسم المجموعة">
+            <textarea id="group-desc" placeholder="وصف المجموعة"></textarea>
+            <button onclick="saveGroup()">إنشاء المجموعة 💕</button>
+        </div>
+    </div>
 
     <script type="module" src="app.js"></script>
 </body>
